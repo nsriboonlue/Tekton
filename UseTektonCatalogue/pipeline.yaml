@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: cd-pipeline
+spec:
+  workspaces:
+    - name: pipeline-workspace
+  params:
+    - name: repo-url
+    - name: branch
+      default: "master"
+  tasks:
+    - name: clone
+      workspaces:
+        - name: output
+          workspace: pipeline-workspace
+      taskRef:
+        name: git-clone
+      params:
+      - name: url
+        value: $(params.repo-url)
+      - name: revision
+        value: $(params.branch)
+
+    # Note: The remaining tasks are unchanged. Do not delete them.
